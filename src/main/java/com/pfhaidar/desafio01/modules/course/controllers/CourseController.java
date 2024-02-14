@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,6 +24,7 @@ import com.pfhaidar.desafio01.modules.course.useCases.FindCourseByCategoryUseCas
 import com.pfhaidar.desafio01.modules.course.useCases.FindCourseByNameAndCategoryUseCase;
 import com.pfhaidar.desafio01.modules.course.useCases.FindCourseByNameUseCase;
 import com.pfhaidar.desafio01.modules.course.useCases.ListAllCoursesUseCase;
+import com.pfhaidar.desafio01.modules.course.useCases.PatchCourseStatusUseCase;
 import com.pfhaidar.desafio01.modules.course.useCases.UpdateCourseByIdUseCase;
 
 import jakarta.transaction.Transactional;
@@ -52,6 +54,9 @@ public class CourseController {
 
     @Autowired
     private DeleteCourseUseCase deleteCourseUseCase;
+
+    @Autowired
+    private PatchCourseStatusUseCase patchCourseStatusUseCase;
 
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody CourseEntity courseEntity) {
@@ -105,6 +110,16 @@ public class CourseController {
         try {
             this.deleteCourseUseCase.execute(id);
             return ResponseEntity.ok().body("deletado!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Object> patch(@PathVariable UUID id){
+        try {
+            String response = this.patchCourseStatusUseCase.execute(id);
+            return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
