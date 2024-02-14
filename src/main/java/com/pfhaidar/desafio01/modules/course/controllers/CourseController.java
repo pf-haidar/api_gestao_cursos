@@ -90,6 +90,9 @@ public class CourseController {
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@RequestBody CourseEntity courseEntity, @PathVariable UUID id) {
         try {
+            if (courseEntity.getName() == null && courseEntity.getCategory() == null) {
+                return ResponseEntity.badRequest().body("Nome e Categoria não podem ser nulos!");
+            }
             var course = this.updateCourseByIdUseCase.execute(courseEntity, id);
             return ResponseEntity.ok().body(course);
         } catch (Exception e) {

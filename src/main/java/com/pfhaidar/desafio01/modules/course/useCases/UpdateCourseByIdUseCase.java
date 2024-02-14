@@ -19,9 +19,6 @@ public class UpdateCourseByIdUseCase {
         CourseEntity course = courseRepository.findById(id)
                 .orElseThrow(() -> new CourseNotFoundException());
 
-        System.out.println("nome -> " + courseEntity.getName());
-        System.out.println("category -> " + courseEntity.getCategory());
-
         if ((courseEntity.getCategory() == null || courseEntity.getCategory().isEmpty())
                 && (courseEntity.getName() != null || !courseEntity.getName().isEmpty())) {
             course.setName(courseEntity.getName());
