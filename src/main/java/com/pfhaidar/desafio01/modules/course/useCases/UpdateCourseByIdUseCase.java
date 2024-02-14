@@ -17,10 +17,21 @@ public class UpdateCourseByIdUseCase {
 
     public CourseEntity execute(CourseEntity courseEntity, UUID id) {
         CourseEntity course = courseRepository.findById(id)
-                .orElseThrow(() ->  new CourseNotFoundException());
-        
-        course.setName(courseEntity.getName());
-        course.setCategory(courseEntity.getCategory());
+                .orElseThrow(() -> new CourseNotFoundException());
+
+        System.out.println("nome -> " + courseEntity.getName());
+        System.out.println("category -> " + courseEntity.getCategory());
+
+        if ((courseEntity.getCategory() == null || courseEntity.getCategory().isEmpty())
+                && (courseEntity.getName() != null || !courseEntity.getName().isEmpty())) {
+            course.setName(courseEntity.getName());
+        } else if ((courseEntity.getName() == null || courseEntity.getName().isEmpty())
+                && (courseEntity.getCategory() != null || !courseEntity.getCategory().isEmpty())) {
+            course.setCategory(courseEntity.getCategory());
+        } else {
+            course.setName(courseEntity.getName());
+            course.setCategory(courseEntity.getCategory());
+        }
 
         return courseRepository.save(course);
     }
